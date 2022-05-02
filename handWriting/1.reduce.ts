@@ -18,4 +18,5 @@ Array.prototype.myReduce = function (fn, initialValue) {
   return res
 }
 
+// 测试
 console.log([1, 2, 3, 4, 5].myReduce((a, b) => a + b, 1))
