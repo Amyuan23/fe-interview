@@ -59,41 +59,97 @@ class MyPromise {
             throw reason
           }
 
-    if (this.PromiseState === 'fulfilled') {
-      onFulfilled(this.PromiseResult)
-    } else if (this.PromiseState === 'rejected') {
-      onRejected(this.PromiseResult)
-    } else if (this.PromiseState === 'pending') {
-      this.onFulfilledCallbacks.push(onFulfilled)
-      this.onRejectedCallbacks.push(onRejected)
-    }
+    const thenPromise = new MyPromise((resolve, reject) => {
+      const resolvePromise = (cb) => {
+        try {
+          const x = cb(this.PromiseResult)
+          if (x instanceof MyPromise) {
+            x.then(resolve, reject)
+          } else {
+            resolve(x)
+          }
+        } catch (error) {
+          reject(error)
+          throw new Error(error)
+        }
+      }
+      if (this.PromiseState === 'fulfilled') {
+        resolvePromise(onFulfilled)
+      } else if (this.PromiseState === 'rejected') {
+        resolvePromise(onRejected)
+      } else if (this.PromiseState === 'pending') {
+        this.onFulfilledCallbacks.push(resolvePromise.bind(this, onFulfilled))
+        this.onRejectedCallbacks.push(resolvePromise.bind(this, onRejected))
+      }
+    })
+    return thenPromise
   }
 }
 
-// 测试
-let p1 = new MyPromise((resolve, reject) => {
-  resolve('成功')
-  reject('失败')
-}).then(
-  (res) => console.log(res),
-  (err) => console.log(err)
-)
-console.log('p1', p1)
+// 以下为测试代码
+// let p1 = new MyPromise((resolve, reject) => {
+//   resolve('成功')
+//   reject('失败')
+// }).then(
+//   (res) => console.log(res),
+//   (err) => console.log(err)
+// )
+// console.log('p1', p1)
 
-let p2 = new MyPromise((resolve, reject) => {
-  setTimeout(() => {
-    reject('失败')
-  }, 1000)
-}).then(
-  (res) => console.log(res),
-  (err) => console.log(err)
-)
-console.log('p2', p2)
+// let p2 = new MyPromise((resolve, reject) => {
+//   setTimeout(() => {
+//     reject('失败')
+//   }, 1000)
+// }).then(
+//   (res) => console.log(res),
+//   (err) => console.log(err)
+// )
+// console.log('p2', p2)
 
-let p3 = new MyPromise((resolve, reject) => {
-  throw '报错'
-}).then(
-  (res) => console.log(res),
-  (err) => console.log(err)
-)
-console.log('p3', p3)
+// let p3 = new MyPromise((resolve, reject) => {
+//   // throw '报错'
+//   setTimeout(() => {
+//     reject('失败')
+//   }, 1000)
+//   // reject('失败')
+// })
+//   .then(
+//     (res) => console.log(res),
+//     (err) => err
+//   )
+//   .then(
+//     (res) => console.log('链式调用：' + res),
+//     (err) => console.log('链式调用：' + err)
+//   )
+//   .then(
+//     (res) => console.log(res),
+//     (err) => console.log('链式调用：' + err)
+//   )
+// console.log('p3', p3)
+
+const test3 = new Promise((resolve, reject) => {
+  // resolve(100) // 输出 状态：成功 值： 200
+  reject(100) // 输出 状态：成功 值：300
+})
+  .then(
+    (res) => 2 * res,
+    (err) => 3 * err
+  )
+  .then(
+    (res) => console.log('成功', res),
+    (err) => console.log('失败', err)
+  )
+
+// const test4 = new Promise((resolve, reject) => {
+//   // resolve(100) // 输出 状态：失败 值：200
+//   reject(100) // 输出 状态：成功 值：300
+//   // 这里可没搞反哦。真的搞懂了，就知道了为啥这里是反的
+// })
+//   .then(
+//     (res) => new Promise((resolve, reject) => reject(2 * res)),
+//     (err) => new Promise((resolve, reject) => resolve(3 * err))
+//   )
+//   .then(
+//     (res) => console.log('成功', res),
+//     (err) => console.log('失败', err)
+//   )
