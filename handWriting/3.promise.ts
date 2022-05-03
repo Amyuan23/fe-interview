@@ -1,3 +1,4 @@
+// https://juejin.cn/post/6994594642280857630
 class MyPromise {
   PromiseResult
   PromiseState
@@ -83,6 +84,55 @@ class MyPromise {
       }
     })
     return thenPromise
+  }
+
+  static all(promises) {
+    return new MyPromise((resolve, reject) => {
+      let results = new Array(promises.length)
+      let resultCount = 0
+
+      const addResult = (idx, result) => {
+        results[idx] = result
+        resultCount++
+        if (resultCount === promises.length) {
+          return resolve(results)
+        }
+      }
+
+      promises.forEach((promise, idx) => {
+        if (promise instanceof MyPromise) {
+          promise.then(
+            (res) => {
+              addResult(idx, res)
+            },
+            (err) => {
+              reject(err)
+            }
+          )
+        } else {
+          addResult(idx, promise)
+        }
+      })
+    })
+  }
+
+  static race(promises) {
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((promise) => {
+        if (promise instanceof MyPromise) {
+          promise.then(
+            (res) => {
+              resolve(res)
+            },
+            (err) => {
+              reject(err)
+            }
+          )
+        } else {
+          resolve(promise)
+        }
+      })
+    })
   }
 }
 
