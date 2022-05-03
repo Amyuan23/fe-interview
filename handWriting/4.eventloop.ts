@@ -29,4 +29,34 @@ loops.register(() => console.log(1), 1000)
 loops.register(() => console.log(1), 1000)
 loops.register(() => console.log(1), 1000)
 
-loops.run()
+// loops.run()
+
+// 递归实现
+const loopsFuc = (cbs) => {
+  if (!cbs?.length) throw '不能传空数组'
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const res = cbs[0].fn()
+      resolve(res)
+    }, cbs[0].timeOut)
+  }).then((res) => {
+    if (cbs.length <= 1) return
+    cbs.shift()
+    loopsFuc(cbs)
+  })
+}
+
+loopsFuc([
+  {
+    fn: () => console.log(1),
+    timeOut: 1000
+  },
+  {
+    fn: () => console.log(2),
+    timeOut: 1000
+  },
+  {
+    fn: () => console.log(3),
+    timeOut: 1000
+  }
+])
