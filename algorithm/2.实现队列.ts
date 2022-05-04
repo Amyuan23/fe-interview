@@ -33,14 +33,16 @@ class Queue {
 }
 
 // 击鼓传花
-function passGame(nameList, num) {
+function passGame(nameList) {
   const queue = new Queue()
   // 加入队列
   for (let index = 0; index < nameList.length; index++) {
     queue.enqueue(nameList[index])
   }
 
+  let num = 0
   while (queue.size() > 1) {
+    num = Math.floor(Math.random() * 10)
     for (let index = 0; index < num; index++) {
       const item = queue.dequeue()
       queue.enqueue(item)
