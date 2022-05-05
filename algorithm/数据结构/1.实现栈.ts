@@ -32,6 +32,8 @@ class Stack {
   }
 }
 
+export default Stack
+
 // 测试
 // const stack = new Stack()
 
