@@ -20,6 +20,8 @@
   "dependencies": {
     "dayjs": "^1.11.1",
     "file-saver": "^2.0.5",
-    "query-string": "^7.1.1"
+    "query-string": "^7.1.1",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4"
   }
 }

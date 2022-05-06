@@ -1,6 +1,6 @@
 // 思路：压栈，出栈
 // {} [] ()
-function matchBracket(str) {
+function matchBracket(str: string): boolean {
   const length = str.length
   if (length === 0) return true
 
