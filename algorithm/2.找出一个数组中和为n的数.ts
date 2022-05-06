@@ -1,4 +1,5 @@
 // 一个递增的数组，找出和为n的数
+// 核心思路 双指针
 
 function findTwoNumbers(arr: number[], num: number): number[] {
   let res: number[] = []
