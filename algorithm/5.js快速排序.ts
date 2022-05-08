@@ -1,5 +1,5 @@
 /**
- * 快速排序
+ * 快速排序,复杂度O(nlogn)
  * @param arr [1,3,7,5,2,8,9,5]
  * @returns []
  */
@@ -26,4 +26,4 @@ const quickSort = (arr: number[]): number[] => {
   return quickSort(left).concat([midValue], quickSort(right))
 }
 
-console.log(quickSort([1, 3, 7, 5, 2, 8, 9, 5]))
+console.log(quickSort([1, 3, 7, 5, 2, 8, 9, 5, -11]))
