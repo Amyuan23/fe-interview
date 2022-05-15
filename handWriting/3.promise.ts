@@ -136,6 +136,56 @@ class MyPromise {
   }
 }
 
+function promiseLimit(promises, limit) {
+  return new Promise((resolve, reject) => {
+    let results = new Array(promises.length)
+    let resultCount = 0
+    const waitPromise = []
+    let runPromiseCount = 0
+
+    const addResult = (idx, result) => {
+      results[idx] = result
+      resultCount++
+      if (resultCount === promises.length) {
+        return resolve(results)
+      }
+      // 看等待队列里面还有没有promise
+      runPromiseCount--
+      if (waitPromise.length) {
+        const { promise, idx } = waitPromise.pop()
+        runPromise(promise, idx)
+      }
+    }
+
+    const runPromise = (promise, idx) => {
+      if (runPromiseCount < 6) {
+        runPromiseCount++
+        if (promise instanceof Promise) {
+          promise.then(
+            (res) => {
+              addResult(idx, res)
+            },
+            (err) => {
+              reject(err)
+            }
+          )
+        } else {
+          addResult(idx, promise)
+        }
+      } else {
+        waitPromise.push({
+          promise,
+          idx
+        })
+      }
+    }
+
+    promises.forEach((promise, idx) => {
+      runPromise(promise, idx)
+    })
+  })
+}
+
 // 以下为测试代码
 // let p1 = new MyPromise((resolve, reject) => {
 //   resolve('成功')
