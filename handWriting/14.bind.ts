@@ -11,3 +11,17 @@ Function.prototype.myBind = function (context: any, ...bindArgs: any[]) {
     self.apply(context, [...bindArgs, ...args])
   }
 }
+
+//@ts-ignore
+Function.prototype.myCall = function (context: any, ...args: any[]) {
+  if (context == null) context = globalThis
+  if (typeof context !== 'object') context = new Object(context)
+
+  const fnKey = Symbol()
+  context[fnKey] = this
+
+  const res = context[fnKey](...args)
+  delete context[fnKey]
+
+  return res
+}
