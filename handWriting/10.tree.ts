@@ -15,7 +15,7 @@ function visitNode(n: Node) {
 }
 
 /**
- * 深度优先遍历一个DOM树
+ * 深度优先遍历一个DOM树, 递归，贪心，栈
  * @param root
  */
 function domTraverse(root: Node) {
