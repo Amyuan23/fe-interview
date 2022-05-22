@@ -1,10 +1,10 @@
-class SleepLoop {
+class SleepQueue {
   private tasks: any[]
   constructor() {
     this.tasks = []
     setTimeout(() => {
       this.next()
-    }, 0)
+    })
   }
 
   next() {
@@ -24,8 +24,9 @@ class SleepLoop {
   }
 }
 
+// 测试
 function add(x: number, y: number) {
   console.log(x + y)
 }
 
-new SleepLoop().sleep(() => add(1, 2), 1000).sleep(() => add(2, 3), 6000)
+new SleepQueue().sleep(() => add(1, 2), 1000).sleep(() => add(2, 3), 6000)
