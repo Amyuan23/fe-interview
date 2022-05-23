@@ -1,26 +1,30 @@
 // 温故知新
+// 哈希表 + 有序  = Map
 class LRUCache {
   private max
-  private list: Array<{ key: any; value: any }>
+  private list: Map<any, any>
   constructor(max: number) {
+    if (max < 1) {
+      throw new Error('请输入正确的max')
+    }
     this.max = max // 缓存容量
-    this.list = []
+    this.list = new Map()
   }
 
   get(key: any) {
-    const index = this.list.findIndex((item) => item.key === key)
-    if (index < 0) return -1
-    const item = this.list[index]
-    this.list.splice(index, 1)
-    this.put(item.key, item.value)
-
-    return item.value
+    if (!this.list.has(key)) return null
+    const res = this.list.get(key)
+    this.set(key, res)
+    return res
   }
 
-  put(key: any, value: any) {
-    if (this.list.length >= this.max) {
-      this.list.splice(0, this.list.length - this.max + 1)
+  set(key: any, value: any) {
+    const list = this.list
+    if (list.has(key)) list.delete(key)
+    list.set(key, value)
+
+    if (list.size > this.max) {
+      list.delete(list.keys().next().value) // 删掉最老的一个元素
     }
-    this.list.push({ key, value })
   }
 }
