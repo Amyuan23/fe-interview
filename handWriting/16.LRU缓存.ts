@@ -1,5 +1,5 @@
 // 温故知新
-// 哈希表 + 有序  = Map
+// 哈希表 + 有序  = Map 。 还有种实现方式是双向链表
 class LRUCache {
   private max
   private list: Map<any, any>
