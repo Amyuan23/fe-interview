@@ -29,5 +29,7 @@ interface B extends Omit<A, 'xx'> {
   xx?: number
 }
 
+type C = B
+
 // 实现ReturnType
 // 实现DeepReadOnly
