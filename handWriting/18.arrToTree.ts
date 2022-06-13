@@ -33,3 +33,26 @@ const arrToTree = (arr: Arr) => {
 }
 
 console.log(arrToTree(arr2))
+
+// 树转数组 广度优先遍历树
+type Node2 = { id: number; name: string; pid: number; children?: Node2[] }
+function domTraverse2(root: Node2 | null) {
+  if (!root) return
+  const queue: Node2[] = []
+  const list: Node2[] = []
+  queue.unshift(root)
+
+  while (queue.length > 0) {
+    const curNode = queue.shift()
+    if (!curNode) break
+    list.push({
+      id: curNode.id,
+      pid: curNode.pid,
+      name: curNode.name
+    })
+    curNode.children && curNode.children.forEach((item) => queue.push(item))
+  }
+  return list
+}
+
+console.log(domTraverse2(arrToTree(arr2)))
