@@ -9,22 +9,27 @@ const arr2 = [
 type Arr = typeof arr2
 
 // 数组转树
-
 const arrToTree = (arr: Arr) => {
   const treeMap = new Map()
 
+  let root = null
   for (let index = 0; index < arr.length; index++) {
-    const element = arr[index]
-    treeMap.set(element.id, { ...element })
+    const element = { ...arr[index] }
+    treeMap.set(element.id, element)
 
     if (treeMap.get(element.pid)) {
       // 有父节点
       const parentNode = treeMap.get(element.pid)
       if (!parentNode.children) parentNode.children = []
-      parentNode.children.push({ ...element })
+      parentNode.children.push(element)
+    }
+    if (element.pid == 0) {
+      root = element
     }
   }
 
   // 返回根节点
-  return treeMap.get(0)
+  return root
 }
+
+console.log(arrToTree(arr2))
