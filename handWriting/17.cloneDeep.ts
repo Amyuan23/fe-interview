@@ -39,8 +39,10 @@ function cloneDeep(obj: any, map = new WeakMap()) {
   }
 
   for (const key in obj) {
-    target[key] = cloneDeep(obj[key], map)
-    return target
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      target[key] = cloneDeep(obj[key], map)
+      return target
+    }
   }
 
   return target
